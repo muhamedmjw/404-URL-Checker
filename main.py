@@ -1,6 +1,7 @@
 import requests
 from src.link_extractor import extract_links
 from src.url_utils import process_urls
+from src.http_checker import process_url_status
 
 
 
@@ -28,9 +29,9 @@ def main():
         print(f"Error fetching {base_domain}: {e}")
         return
     
-    # Rest of your code...
     raw_urls = extract_links(html)
     clean_urls = process_urls(raw_urls, base_domain)
+    broken_url = process_url_status(clean_urls)
     
     
 
