@@ -14,15 +14,22 @@ def crawl_website(base_domain):
 
         if current_page not in pages_already_visited:
             try:
-                html = requests.get(current_page, timeout=10).text
+                response = requests.get(current_page, timeout=10)
+                if response.status_code >= 400:  # Page itself is broken
+                    broken_urls.append({
+                        'url': current_page,
+                        'status_code': response.status_code,
+                        'is_broken': True
+                    })
+                html = response.text
             except requests.RequestException:
                 continue  # Skip this page if it fails
 
             urls = extract_urls(html)
             clean_urls = process_urls(urls, base_domain)
-            page_roken_urls = process_url_status(clean_urls)
-            
-            broken_urls.extend(page_roken_urls)
+            page_broken_urls = process_url_status(clean_urls)
+
+            broken_urls.extend(page_broken_urls)
             pages_to_visit.append(clean_urls)
             pages_already_visited.append(current_page)
 
