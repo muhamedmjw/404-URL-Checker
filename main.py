@@ -1,8 +1,8 @@
 import requests
-from src.link_extractor import extract_links
+from src.url_extractor import extract_urls
 from src.url_utils import process_urls
 from src.http_checker import process_url_status
-
+from src.crawler import crawl_website
 
 
 def get_domain_from_user():
@@ -19,21 +19,19 @@ def get_domain_from_user():
 def main():
     base_domain = get_domain_from_user()
     
-    try:
-        response = requests.get(base_domain, timeout=10, headers={
-            'User-Agent': 'Mozilla/5.0 (Link Checker Bot)'
-        })
-        response.raise_for_status()  # Raises exception for 4xx/5xx status codes
-        html = response.text
-    except requests.RequestException as e:
-        print(f"Error fetching {base_domain}: {e}")
-        return
+    print(f"Starting crawl of {base_domain}...")
+    broken_links = crawl_website(base_domain)
     
-    raw_urls = extract_links(html)
-    clean_urls = process_urls(raw_urls, base_domain)
-    broken_url = process_url_status(clean_urls)
+    print(f"\n=== CRAWL COMPLETE ===")
+    print(f"Found {len(broken_links)} broken links:")
     
-    
+    if broken_links:
+        for i, link in enumerate(broken_links, 1):
+            print(f"{i}. {link['url']} (Status: {link['status_code']})")
+    else:
+        print("No broken links found - great website maintenance!")
+
+
 
 if __name__ == "__main__":
     main()
