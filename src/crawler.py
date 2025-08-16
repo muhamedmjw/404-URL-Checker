@@ -13,6 +13,7 @@ def crawl_website(base_domain):
         current_page = pages_to_visit.pop(0)
 
         if current_page not in pages_already_visited:
+            print(f"Crawling: {current_page}")
             try:
                 response = requests.get(current_page, timeout=10)
                 if response.status_code >= 400:  # Page itself is broken
@@ -30,7 +31,13 @@ def crawl_website(base_domain):
             page_broken_urls = process_url_status(clean_urls)
 
             broken_urls.extend(page_broken_urls)
-            pages_to_visit.append(clean_urls)
+            pages_to_visit.extend(clean_urls)
             pages_already_visited.append(current_page)
+
+            print(f"  -> Found {len(urls)} raw links")
+            print(f"  -> After processing: {len(clean_urls)} valid links") 
+            print(f"  -> Broken on this page: {len(page_broken_urls)}")
+            print(f"  -> Pages still to visit: {len(pages_to_visit)}")
+            print("---")
 
     return broken_urls
