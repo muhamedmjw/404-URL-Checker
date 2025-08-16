@@ -32,6 +32,20 @@ Enter the website URL to check: https://example.com
 
 Example output:
 ```
+Starting crawl of https://example.com...
+Crawling: https://example.com
+Found 15 links on this page
+After processing: 8 valid links
+broken on this page: 2
+pages still to vist: 21
+---
+Crawling: https://example.com/about
+Found 8 links on this page
+After processing: 7 valid links
+broken on this page: 0
+pages still to vist: 19
+...
+
 === CRAWL COMPLETE ===
 Found 3 broken links:
 1. https://example.com/old-page (Status: 404)
