@@ -40,4 +40,8 @@ def crawl_website(base_domain):
             print(f"  -> Pages still to visit: {len(pages_to_visit)}")
             print("---")
 
+            max_pages = 300  # Stop after 300 pages
+            if len(pages_already_visited) >= max_pages:
+                break
+
     return broken_urls
