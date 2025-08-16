@@ -22,14 +22,18 @@ def main():
     print(f"Starting crawl of {base_domain}...")
     broken_links = crawl_website(base_domain)
     
-    print(f"\n=== CRAWL COMPLETE ===")
-    print(f"Found {len(broken_links)} broken links:")
+    # Remove duplicates by URL
+    unique_broken = []
+    seen_urls = set()
     
-    if broken_links:
-        for i, link in enumerate(broken_links, 1):
-            print(f"{i}. {link['url']} (Status: {link['status_code']})")
-    else:
-        print("No broken links found - great website maintenance!")
+    for link in broken_links:
+        if link['url'] not in seen_urls:
+            unique_broken.append(link)
+            seen_urls.add(link['url'])
+    
+    print(f"Found {len(unique_broken)} unique broken links:")
+    for i, link in enumerate(unique_broken, 1):
+        print(f"{i}. {link['url']} (Status: {link['status_code']})")
 
 
 
